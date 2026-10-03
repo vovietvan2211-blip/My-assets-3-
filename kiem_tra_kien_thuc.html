@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KIỂM TRA KIẾN THỨC</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1b2d;--bg2:#162844;--panel:#1b3253;--line:#2f4f7d;--gold:#ffc94d;--ink:#f6efe0;--mute:#9fb3d1;
+--t1:#2f8f83;--t2:#d9a21b;--t3:#e0642f;--t4:#c92f4f}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Be Vietnam Pro",Arial,sans-serif;color:var(--ink);min-height:100vh;
+background:radial-gradient(900px 500px at 50% -10%,#24457a 0%,transparent 70%),var(--bg)}
+.wrap{max-width:1180px;margin:auto;padding:26px 20px 40px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+h1{margin:0;font-weight:900;font-size:clamp(28px,5vw,56px);letter-spacing:2px;
+background:linear-gradient(180deg,#fff2c2,#ffc94d 55%,#e08a1e);-webkit-background-clip:text;background-clip:text;color:transparent;
+filter:drop-shadow(0 4px 0 rgba(0,0,0,.35));text-align:center;flex-grow:1}
+.audio-ctrl{display:flex;gap:8px;align-items:center;background:var(--bg2);padding:6px 12px;border-radius:20px;border:1px solid var(--line)}
+.audio-btn{background:var(--gold);color:#2a1a00;border:0;padding:6px 12px;border-radius:12px;font-weight:700;cursor:pointer;font-size:13px}
+.end-btn{background:#e0463f;color:#fff;border:0;padding:8px 16px;border-radius:12px;font-weight:800;cursor:pointer;font-size:14px;box-shadow:0 4px 0 #9e2a25;transition:.15s}
+.end-btn:hover{background:#f0524b;transform:translateY(-2px)}
+.teams{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.team{position:relative;background:var(--bg2);border:2px solid var(--line);border-radius:18px;padding:14px 12px 12px;text-align:center;transition:.25s}
+.team::before{content:"";position:absolute;left:0;right:0;top:0;height:7px;border-radius:16px 16px 0 0;background:var(--c)}
+.team.on{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 0 0 3px rgba(255,201,77,.25),0 10px 28px rgba(0,0,0,.4)}
+.team.on::after{content:"ĐANG TRẢ LỜI";position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);color:#2a1a00;
+font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.team input{width:90%;padding:8px;background:transparent;color:var(--ink);border:0;border-bottom:2px dashed var(--line);text-align:center;font:700 18px "Be Vietnam Pro",Arial,sans-serif}
+.team input:focus{outline:none;border-bottom-color:var(--gold)}
+.score{font-size:52px;line-height:1.1;color:var(--gold);font-weight:900;margin-top:6px}
+.legend{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;font-size:14px;color:var(--mute)}
+.legend span{display:flex;align-items:center;gap:6px}.legend i{width:14px;height:14px;border-radius:4px;background:var(--c)}
+.board{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.card{min-height:98px;border:0;border-radius:16px;background:var(--c);color:#fff;cursor:pointer;font-family:inherit;
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+box-shadow:0 6px 0 rgba(0,0,0,.35);transition:transform .15s,box-shadow .15s}
+.card b{font-size:36px;font-weight:900;line-height:1}.card small{font-size:13px;font-weight:600;opacity:.92}
+.card:hover{transform:translateY(-4px);box-shadow:0 10px 0 rgba(0,0,0,.35)}
+.card:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.card.done{opacity:.18;cursor:default;box-shadow:none;transform:none;filter:grayscale(1)}
+.p10{--c:var(--t1)}.p20{--c:var(--t2)}.p30{--c:var(--t3)}.p40{--c:var(--t4)}
+.panel{margin-top:26px;background:var(--panel);border:2px solid var(--line);border-radius:22px;padding:26px;box-shadow:0 14px 40px rgba(0,0,0,.35)}
+.tag{display:inline-block;background:var(--gold);color:#2a1a00;font-weight:800;padding:5px 14px;border-radius:20px;font-size:14px}
+.q{font-size:clamp(22px,3.2vw,32px);line-height:1.4;font-weight:600;margin-top:12px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.opt{padding:16px 18px;border-radius:12px;background:var(--bg2);border:2px solid var(--line);color:var(--ink);cursor:pointer;text-align:left;font:600 18px "Be Vietnam Pro",Arial,sans-serif;transition:.15s}
+.opt:hover:not(:disabled){background:#27487a;border-color:var(--gold)}
+.opt:disabled{cursor:default;opacity:.7}
+.answer{margin-top:18px;padding:14px 16px;background:#10203a;border-left:6px solid var(--gold);border-radius:10px;color:#ffe9a8;font-size:18px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.actions button{padding:12px 20px;border:0;border-radius:10px;background:var(--gold);color:#2a1a00;font:800 16px "Be Vietnam Pro",Arial,sans-serif;cursor:pointer}
+.actions button.secondary{background:#41597f;color:#fff}
+#status{text-align:center;color:var(--mute);margin-top:18px;font-size:16px}#status b{color:var(--gold)}
+
+/* POPUP TỔNG KẾT ĐIỂM */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,27,45,.92);backdrop-filter:blur(8px);z-index:999;justify-content:center;align-items:center;padding:20px}
+.modal-content{background:var(--panel);border:3px solid var(--gold);border-radius:28px;padding:32px;max-width:550px;width:100%;text-align:center;box-shadow:0 0 50px rgba(255,201,77,.3);animation:pop .3s cubic-bezier(.175,.885,.32,1.275)}
+@keyframes pop{0%{transform:scale(.7);opacity:0}100%{transform:scale(1);opacity:1}}
+.modal h2{font-size:36px;color:var(--gold);margin:0 0 20px;text-transform:uppercase;letter-spacing:1px}
+.rank-list{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.rank-item{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);font-size:20px;font-weight:700}
+.rank-item.top1{border-color:var(--gold);background:linear-gradient(900deg,rgba(255,201,77,.2),transparent);font-size:24px}
+.rank-badge{font-size:24px;margin-right:10px}
+.close-btn{padding:12px 30px;background:var(--gold);color:#2a1a00;border:0;border-radius:12px;font:800 18px inherit;cursor:pointer;margin-top:15px}
+
+@media(max-width:750px){.board{grid-template-columns:repeat(3,1fr)}.teams{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.card{min-height:84px}}
+</style>
+</head>
+<body>
+
+<!-- CHỈ DÙNG 1 FILE CLICK.MP3 LÀM NHẠC NỀN -->
+<audio id="sound-bg" src="click.mp3" preload="auto" loop></audio>
+
+<div class="wrap">
+<div class="header">
+  <button class="end-btn" onclick="showSummary()">🏆 TỔNG KẾT ĐIỂM</button>
+  <h1>KIỂM TRA KIẾN THỨC</h1>
+  <div class="audio-ctrl">
+    <button class="audio-btn" id="mute-btn" onclick="toggleMute()">🔊 Bật Nhạc Nền</button>
+  </div>
+</div>
+
+<div class="teams">
+  <div class="team" id="t0" style="--c:#e0463f"><input id="n0" value="Đội 1"><div id="s0" class="score">0</div></div>
+  <div class="team" id="t1" style="--c:#3f8be0"><input id="n1" value="Đội 2"><div id="s1" class="score">0</div></div>
+  <div class="team" id="t2" style="--c:#3fb36b"><input id="n2" value="Đội 3"><div id="s2" class="score">0</div></div>
+</div>
+
+<div class="legend">
+  <span style="--c:var(--t1)"><i></i>10 điểm</span><span style="--c:var(--t2)"><i></i>20 điểm</span>
+  <span style="--c:var(--t3)"><i></i>30 điểm</span><span style="--c:var(--t4)"><i></i>40 điểm</span>
+</div>
+
+<div id="board" class="board"></div>
+<div id="panel" class="panel"><div class="q">Chọn một ô câu hỏi để bắt đầu!</div></div>
+<div id="status"></div>
+</div>
+
+<!-- POPUP BẢNG XẾP HẠNG TỔNG KẾT -->
+<div id="summary-modal" class="modal">
+  <div class="modal-content">
+    <h2>🎉 BẢNG VINH DANH 🎉</h2>
+    <div id="rank-container" class="rank-list"></div>
+    <button class="close-btn" onclick="closeSummary()">Quay lại Trò chơi</button>
+  </div>
+</div>
+
+<script>
+// --- HỆ THỐNG XỬ LÝ ÂM THANH ---
+let soundEnabled = true;
+let audioCtx = null;
+
+// Phát nhạc nền click.mp3 lặp vô tận
+function startBGM() {
+  if (!soundEnabled) return;
+  const bgMusic = document.getElementById('sound-bg');
+  if (bgMusic && bgMusic.paused) {
+    bgMusic.play().catch(() => {});
+  }
+}
+
+// Tự tạo hiệu ứng âm thanh Đúng/Sai bằng Web Audio API
+function playSoundEffect(type) {
+  if (!soundEnabled) return;
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+
+  if (type === 'correct') {
+    // Tiếng chuông báo đúng (nốt C5 -> E5)
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523.25, now);
+    osc.frequency.setValueAtTime(659.25, now + 0.12);
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + 0.4);
+  } else if (type === 'wrong') {
+    // Tiếng bíp trầm báo sai
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(160, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.35);
+    gain.gain.setValueAtTime(0.3, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + 0.35);
+  }
+}
+
+function toggleMute() {
+  soundEnabled = !soundEnabled;
+  const bgMusic = document.getElementById('sound-bg');
+  
+  document.getElementById("mute-btn").textContent = soundEnabled ? "🔊 Bật Nhạc Nền" : "🔇 Tắt Nhạc Nền";
+  
+  if (!soundEnabled) {
+    if (bgMusic) bgMusic.pause();
+  } else {
+    startBGM();
+  }
+}
+
+const qs=[
+["Tác giả của bài thơ Việt Bắc là ai?",["A. Nhà thơ Quang Dũng","B. Nhà thơ Tố Hữu","C. Nhà thơ Hàn Mặc Tử","D. Nhà thơ Xuân Diệu"],1,10],
+["Việt Bắc được sáng tác vào năm nào?",["A. Năm 1945","B. Năm 1950","C. Năm 1954","D. Năm 1975"],2,10],
+["Hoàn cảnh sáng tác của Việt Bắc gắn với sự kiện nào?",["A. Sự kiện Cách mạng Tháng Tám năm 1945","B. Trung ương Đảng và Chính phủ về Hà Nội","C. Chiến thắng Điện Biên Phủ vang lừng 1954","D. Ký kết Hiệp định Paris về Việt Nam 1973"],1,10],
+["Chủ đề chính của Việt Bắc là gì?",["A. Tình yêu lứa đôi thắm thiết","B. Tình nghĩa thủy chung cán bộ và nhân dân","C. Vẻ đẹp nhộn nhịp nơi đô thị","D. Mảnh đất thiên nhiên vùng biển đảo"],1,10],
+["Cụm từ “Mười lăm năm ấy” gợi điều gì?",["A. Chặng đường 15 năm tuổi đời","B. 15 năm Việt Bắc gắn bó cách mạng","C. Thời gian 15 năm sống hòa bình","D. Hành trình 15 năm sáng tác thơ"],1,20],
+["“Mình – ta” trong bài thơ tạo nên hình thức gì?",["A. Đối đáp giao duyên giàu tình cảm","B. Độc thoại nội tâm đầy sâu lắng","C. Tranh luận gay gắt giữa hai người","D. Kể chuyện lịch sử theo tiến trình"],0,20],
+["“Rừng xanh hoa chuối đỏ tươi” là bức tranh mùa nào?",["A. Mùa xuân","B. Mùa hạ","C. Mùa thu","D. Mùa đông"],3,10],
+["“Ngày xuân mơ nở trắng rừng” nổi bật với màu gì?",["A. Gam màu đỏ","B. Gam màu trắng","C. Gam màu vàng","D. Gam màu xanh"],1,10],
+["“Ve kêu rừng phách đổ vàng” là mùa nào?",["A. Mùa đông","B. Mùa xuân","C. Mùa hạ","D. Mùa thu"],2,10],
+["“Rừng thu trăng rọi hòa bình” gợi vẻ đẹp nào?",["A. Rộn ràng náo nhiệt","B. Thanh bình yên ả","C. Dữ dội gập ghềnh","D. Lạnh lẽo u buồn"],1,10],
+["“Áo chàm” là hình ảnh mang tính chất gì?",["A. Biện pháp so sánh","B. Biện pháp hoán dụ","C. Biện pháp nói quá","D. Biện pháp điệp ngữ"],1,20],
+["Bốn mùa trong bức tranh tứ bình gắn với điều gì?",["A. Chỉ thiên nhiên rừng núi","B. Thiên nhiên và con người","C. Chỉ bối cảnh chiến tranh","D. Cuộc sống nơi thành thị"],1,20],
+["“Rừng cây núi đá ta cùng đánh Tây” sử dụng biện pháp nổi bật nào?",["A. Biện pháp nhân hóa","B. Biện pháp điệp ngữ","C. Biện pháp nói giảm","D. Biện pháp đảo ngữ"],0,20],
+["“Núi giăng thành luỹ sắt dày” làm nổi bật Việt Bắc như thế nào?",["A. Một thành lũy vững chắc che chở cách mạng","B. Một vùng danh lam thắng cảnh du lịch đẹp","C. Một đô thị hiện đại sầm uất ngày mới","D. Một vùng biển đảo trù phú của đất nước"],0,20],
+["“Rừng che bộ đội, rừng vây quân thù” nhấn mạnh vai trò nào của thiên nhiên?",["A. Trang trí phong cảnh","B. Hỗ trợ cuộc kháng chiến","C. Tạo không khí lãng mạn","D. Gợi tình yêu lứa đôi"],1,20],
+["“Đêm đêm rầm rập như là đất rung” dùng biện pháp gì?",["A. Biện pháp ẩn dụ","B. Biện pháp so sánh","C. Biện pháp hoán dụ","D. Biện pháp liệt kê"],1,20],
+["“Điệp điệp trùng trùng” gợi điều gì?",["A. Đoàn quân đông đảo nối tiếp nhau","B. Sự cô đơn giữa núi rừng rộng lớn","C. Sự yên tĩnh của chiến khu về đêm","D. Vẻ đẹp thơ mộng của thiên nhiên"],0,30],
+["“Ánh sao đầu súng, bạn cùng mũ nan” có hình ảnh nhân hóa nào?",["A. Chiếc mũ nan","B. Khẩu súng bộ đội","C. Ánh sao trên trời","D. Con đường Việt Bắc"],2,30],
+["“Tin vui chiến thắng trăm miền” thể hiện điều gì?",["A. Nỗi buồn chia ly","B. Niềm vui lan tỏa","C. Nỗi nhớ cá nhân","D. Sự tiếc nuối lớn"],1,20],
+["Các địa danh Hòa Bình, Tây Bắc, Điện Biên, Đồng Tháp, An Khê... sử dụng biện pháp gì?",["A. Biện pháp liệt kê","B. Biện pháp so sánh","C. Biện pháp nhân hóa","D. Câu hỏi tu từ nghệ thuật"],0,20],
+["“Vui từ Đồng Tháp, An Khê / Vui lên Việt Bắc...” nổi bật bởi điều gì?",["A. Điệp cấu trúc cú pháp","B. Biện pháp ẩn dụ chuyển đổi","C. Biện pháp nói quá phóng đại","D. Biện pháp đảo ngữ nghệ thuật"],0,20],
+["Mạch vận động của bài thơ bắt đầu từ đâu?",["A. Khí thế chiến thắng","B. Chia tay trong hiện tại","C. Bức tranh tứ bình đẹp","D. Kết luận khẳng định lòng thù"],1,30],
+["Cấu tứ bài thơ vận động từ nỗi nhớ đến điều gì?",["A. Nghĩa tình thủy chung","B. Tình yêu đôi lứa thắm thiết","C. Nỗi lo sợ cuộc chiến gian khổ","D. Khao khát cuộc sống đô thị mới"],0,30],
+["Hình ảnh “Ánh sao đầu súng” tượng trưng cho điều gì?",["A. Khát vọng chiến thắng","B. Sự giàu có thịnh vượng","C. Mùa thu thanh bình đẹp","D. Nỗi cô đơn của người lính"],0,40]
+];
+
+let scores=[0,0,0], currentTeam=0, used=Array(qs.length).fill(false), current=null;
+const nm=t=>document.getElementById("n"+t).value;
+
+const board=document.getElementById("board");
+qs.forEach((x,i)=>{
+ const b=document.createElement("button"); b.className="card p"+x[3]; b.id="c"+i;
+ b.innerHTML=`<b>${i+1}</b><small>${x[3]} điểm</small>`;
+ b.onclick=()=>openQ(i);
+ board.appendChild(b);
+});
+
+function openQ(i){
+ if(used[i]) return;
+ startBGM(); // Phát nhạc nền khi tương tác
+ current=i;
+ const x=qs[i];
+ let html=`<span class="tag">Câu ${i+1} • ${x[3]} điểm</span>
+ <div class="q">${x[0]}</div><div class="opts">`;
+ x[1].forEach((o,j)=>html+=`<button class="opt" onclick="answer(${j})">${o}</button>`);
+ html+=`</div><div id="feedback"></div>`;
+ document.getElementById("panel").innerHTML=html;
+}
+
+function answer(j){
+ const x=qs[current], fb=document.getElementById("feedback");
+ document.querySelectorAll(".opt").forEach(b=>b.disabled=true);
+ if(j===x[2]){
+   playSoundEffect('correct');
+   scores[currentTeam]+=x[3];
+   fb.innerHTML=`<div class="answer">✅ Chính xác! <b>+${x[3]} điểm</b></div>`;
+   finishQ();
+ }else{
+   playSoundEffect('wrong');
+   fb.innerHTML=`<div class="answer">❌ Chưa chính xác!<br><br>💥 Đội khác có muốn cướp câu này không?</div>
+   <div class="actions"><button onclick="steal()">Cho cướp điểm</button><button class="secondary" onclick="skipQ()">Bỏ qua</button></div>`;
+   update();
+ }
+}
+
+function steal(){
+ startBGM();
+ let names=[0,1,2].filter(x=>x!==currentTeam);
+ let html=`<div class="answer">💥 Chọn đội cướp điểm:</div><div class="actions">`;
+ names.forEach(t=>html+=`<button onclick="stealAnswer(${t})">${nm(t)}</button>`);
+ html+=`</div>`;
+ document.getElementById("feedback").innerHTML=html;
+}
+
+function stealAnswer(t){
+ playSoundEffect('correct');
+ const x=qs[current];
+ let fb=document.getElementById("feedback");
+ scores[t]+=Math.ceil(x[3]/2);
+ fb.innerHTML=`<div class="answer">🏆 <b>${nm(t)}</b> cướp thành công! <b>+${Math.ceil(x[3]/2)} điểm</b><br><br>💡 Đáp án đúng là: <b>${x[1][x[2]]}</b></div>`;
+ finishQ();
+}
+
+function skipQ(){
+ startBGM();
+ const x=qs[current];
+ let fb=document.getElementById("feedback");
+ fb.innerHTML=`<div class="answer">💡 Đáp án đúng là: <b>${x[1][x[2]]}</b></div>`;
+ finishQ();
+}
+
+function finishQ(){
+ used[current]=true;
+ document.getElementById("c"+current).classList.add("done");
+ currentTeam=(currentTeam+1)%3;
+ update();
+}
+
+function update(){
+ for(let i=0;i<3;i++){
+  document.getElementById("s"+i).textContent=scores[i];
+  document.getElementById("t"+i).classList.toggle("on",i===currentTeam);
+ }
+ document.getElementById("status").innerHTML=`Lượt hiện tại: <b>${nm(currentTeam)}</b>`;
+}
+
+// XỬ LÝ POPUP TỔNG KẾT ĐIỂM
+function showSummary() {
+  playSoundEffect('correct');
+  const teamData = [
+    { name: nm(0), score: scores[0] },
+    { name: nm(1), score: scores[1] },
+    { name: nm(2), score: scores[2] }
+  ];
+
+  teamData.sort((a, b) => b.score - a.score);
+
+  const badges = ["🥇", "🥈", "🥉"];
+  let html = "";
+
+  teamData.forEach((t, i) => {
+    const isTop1 = i === 0 ? "top1" : "";
+    html += `<div class="rank-item ${isTop1}">
+      <div><span class="rank-badge">${badges[i]}</span>${t.name}</div>
+      <div style="color:var(--gold)">${t.score} điểm</div>
+    </div>`;
+  });
+
+  document.getElementById("rank-container").innerHTML = html;
+  document.getElementById("summary-modal").style.display = "flex";
+}
+
+function closeSummary() {
+  startBGM();
+  document.getElementById("summary-modal").style.display = "none";
+}
+
+document.querySelectorAll(".team input").forEach(inp=>inp.oninput=update);
+update();
+</script>
+</body>
+</html>
